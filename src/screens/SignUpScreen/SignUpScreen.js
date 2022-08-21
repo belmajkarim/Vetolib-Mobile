@@ -1,16 +1,18 @@
 import React, {useState} from "react";
-import {View, Text, Image, StyleSheet, useWindowDimensions} from "react-native";
-import Logo from '../../../assets/favicon.png'
+import {View, Text, StyleSheet} from "react-native";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton/CustomButton";
 
-const SignInScreen = () => {
+const SignUpScreen = () => {
+    const [UserName, setUserName] = useState('');
     const [Email, setEmail] = useState('');
     const [Password, setPassword] = useState('');
-    const {height} = useWindowDimensions();
+    const [PasswordRepeat, setPasswordRepeat] = useState('');
 
-    const onSignInPressed = () => {
-        console.warn("sign in")
+
+
+    const onSignUpPressed = () => {
+        console.warn("sign Up")
     };
     const onForgotPasswordPressed = () => {
         console.warn("forgot password")
@@ -23,11 +25,11 @@ const SignInScreen = () => {
     };
     return (
         <View style={styles.root}>
-            <Image
-                source={Logo}
-                style={[styles.logo, {height: height * 0.3}]}
-                resizeMode={"contain"}
-            />
+            <Text style={styles.title}>Create an account</Text>
+            <CustomInput
+                placeholder="UserName"
+                value={UserName}
+                setValue={setUserName}/>
             <CustomInput
                 placeholder="Email"
                 value={Email}
@@ -38,8 +40,15 @@ const SignInScreen = () => {
                 setValue={setPassword}
                 secureTextEntry={true}
             />
-            <CustomButton text="Sign In" onPress={onSignInPressed}/>
-            <CustomButton text="Forgot Password" onPress={onForgotPasswordPressed}/>
+            <CustomInput
+                placeholder="PasswordRepeat"
+                value={PasswordRepeat}
+                setValue={setPasswordRepeat}
+                secureTextEntry={true}
+            />
+            <CustomButton text="Sign Up" onPress={onSignUpPressed} />
+            <Text style={styles.text}> By registering, you confirm that you accept our <Text style={styles.link}>terms of use</Text> and <Text style={styles.link}> privacy</Text> </Text>
+
             <CustomButton text="Sign In with Facebook" onPress={onSignInFacebook}/>
             <CustomButton text="Sign In with Google" onPress={onSignInGoogle}/>
 
@@ -52,11 +61,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 20,
     },
-    Logo: {
-        width: '70%',
-        maxWidth: 300,
-        height: 100
+    text: {
+        color: 'gray',
+        marginVertical: 10
+    },
+    link:{
+        color: '#FDB075',
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: "bold",
+        margin: 10,
+        color: '#051C60'
 
     }
 })
-export default SignInScreen
+export default SignUpScreen
