@@ -10,12 +10,13 @@ import {
 import * as Animatable from 'react-native-animatable';
 import {LinearGradient} from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
+import {createUser} from "../../Utils/Auth";
 
 const SignInScreen = ({navigation}) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.text_header}>Welcome !</Text>
+                <Text style={styles.text_header}>Bienvenue !</Text>
             </View>
             <View style={styles.footer}>
                 <Text style={styles.text_footer}>Email :</Text>
@@ -26,13 +27,13 @@ const SignInScreen = ({navigation}) => {
                         size={20}
                     />
                     <TextInput
-                        placeholder={"Your Email..."}
+                        placeholder={"Votre Email..."}
                         style={styles.textInput}
                         autoCapitalize={"none"}
                     />
 
                 </View>
-                <Text style={[styles.text_footer, {marginTop: 35}]} >Password :</Text>
+                <Text style={[styles.text_footer, {marginTop: 35}]} >Mot de passe :</Text>
                 <View style={styles.action}>
                     <FontAwesome
                         name="lock"
@@ -40,14 +41,11 @@ const SignInScreen = ({navigation}) => {
                         size={20}
                     />
                     <TextInput
-                        placeholder={"Your Password..."}
+                        placeholder={"Votre mot de passe..."}
                         secureTextEntry={true}
                         style={styles.textInput}
                         autoCapitalize={"none"}
                     />
-                    <Animatable.View>
-
-                    </Animatable.View>
 
                 </View>
                 <View style={styles.button}>
@@ -55,18 +53,17 @@ const SignInScreen = ({navigation}) => {
                         colors={['#08d4c4','#01ab9d']}
                         style={styles.signIn}
                     >
-                        <Text style={[styles.textSign,{color: '#fff' }]}> Sign In</Text>
+                        <Text style={[styles.textSign,{color: '#fff' }]}> Connexion</Text>
                     </LinearGradient>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('SignUpScreen')}
                         style={[styles.signIn, {borderColor: '#009387', borderWidth: 1, marginTop: 15}]}
                     >
-                        <Text style={[styles.textSign, {color: '#009387'}]}>Sign Up</Text>
+                        <Text style={[styles.textSign, {color: '#009387'}]}>Inscription</Text>
                     </TouchableOpacity>
 
                 </View>
             </View>
-
         </View>
     );
 };
