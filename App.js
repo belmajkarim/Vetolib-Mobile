@@ -7,30 +7,23 @@ import SignInScreen from "./src/screens/SignInScreen";
 import {NavigationContainer} from "@react-navigation/native";
 import SignUpScreen from "./src/screens/SignUpScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
-import HomeScreen from "./src/screens/HomeScreen";
 import {createDrawerNavigator} from "@react-navigation/drawer";
 import DrawerNavigator from "@react-navigation/drawer/src/navigators/createDrawerNavigator";
 import StackNavigator from "@react-navigation/stack/src/navigators/createStackNavigator";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import {AuthProvider} from "./src/context/AuthContext";
+import AppNav from "./src/navigation/AppNav";
 
 const Drawer = createDrawerNavigator()
-const stack = createNativeStackNavigator()
+
 export default function App() {
   console.log("changes saved");
 
   return (
-    <NavigationContainer style={styles.root}>
+      <AuthProvider>
+        <AppNav/>
+      </AuthProvider>
 
-        <stack.Navigator
-            screenOptions={{
-                headerShown: false
-            }}>
-            <stack.Screen name="SplashScreen" component={SplashScreen}/>
-            <stack.Screen name="SignInScreen" component={SignInScreen}/>
-            <stack.Screen name="SignUpScreen" component={SignUpScreen}/>
-        </stack.Navigator>
-      <StatusBar style="auto" />
-    </NavigationContainer>
 
   );
 }

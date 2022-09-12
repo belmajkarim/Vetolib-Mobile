@@ -8,18 +8,17 @@ import {
     StyleSheet
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import {LinearGradient} from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
 import axios from "axios";
 
 const SignUpScreen = ({navigation}) => {
 
-    const [username, SetUserName] = React.useState('');
-    const [Email, SetEmail] = React.useState('');
-    const [Password, SetPassword] =React.useState('');
+    const [name, SetName] = useState('');
+    const [email, SetEmail] = useState('');
+    const [password, SetPassword] = useState('');
 
     const handleClick = async () => {
-        axios.post('http://localhost:4000/users/signup', { username:username,Email:Email,Password: Password })
+        axios.post('localhost:4000/users/signup', { name:name,email:email,password: password })
             .then(response => console.log(response.data));
     };
 
@@ -40,8 +39,8 @@ const SignUpScreen = ({navigation}) => {
                         placeholder={"UserName..."}
                         style={styles.textInput}
                         autoCapitalize={"none"}
-                        value={username}
-                        onChangeText={username => SetUserName(username)}
+                        value={name}
+                        onChangeText={name => SetName(name)}
                     />
 
                 </View>
@@ -56,8 +55,8 @@ const SignUpScreen = ({navigation}) => {
                         placeholder={"Votre Email..."}
                         style={styles.textInput}
                         autoCapitalize={"none"}
-                        value={Email}
-                        onChangeText={Email => SetEmail(Email)}
+                        value={email}
+                        onChangeText={email => SetEmail(email)}
                     />
 
                 </View>
@@ -73,8 +72,8 @@ const SignUpScreen = ({navigation}) => {
                         secureTextEntry={true}
                         style={styles.textInput}
                         autoCapitalize={"none"}
-                        value={Password}
-                        onChangeText={Password => SetPassword(Password)}
+                        value={password}
+                        onChangeText={password => SetPassword(password)}
                     />
                     <Animatable.View>
 
@@ -97,18 +96,17 @@ const SignUpScreen = ({navigation}) => {
 
                 </View>
                 <View style={styles.button}>
-                    <LinearGradient
-                        colors={['#08d4c4','#01ab9d']}
-                        style={styles.signIn}
-                        OnPress={() => handleClick(this)}
+                    <TouchableOpacity
+                        onPress={() => handleClick(this)}
+                        style={[styles.signIn, {borderColor: '#132448', borderWidth: 1, marginTop: 15}]}
                     >
-                        <Text style={[styles.textSign,{color: '#fff' }]}> Inscription</Text>
-                    </LinearGradient>
+                        <Text style={[styles.textSign, {color: '#132448'}]}>Inscription</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('SignInScreen')}
-                        style={[styles.signIn, {borderColor: '#009387', borderWidth: 1, marginTop: 15}]}
+                        style={[styles.signIn, {borderColor: '#132448', borderWidth: 1, marginTop: 15}]}
                     >
-                        <Text style={[styles.textSign, {color: '#009387'}]}>Connexion</Text>
+                        <Text style={[styles.textSign, {color: '#132448'}]}>Connexion</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -123,7 +121,7 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 3,
-        backgroundColor: '#009387'
+        backgroundColor: '#132448'
     },
     header: {
         flex: 1,
@@ -145,7 +143,7 @@ const styles = StyleSheet.create({
         fontSize: 30
     },
     text_footer: {
-        color: '#05375a',
+        color: '#132448',
         fontSize: 18
     },
     action: {
@@ -166,7 +164,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
-        color: '#05375a',
+        color: '#132448',
     },
     errorMsg: {
         color: '#FF0000',

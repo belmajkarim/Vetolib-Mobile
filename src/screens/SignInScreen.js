@@ -1,18 +1,81 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {
     View,
     Text,
     TouchableOpacity,
     TextInput,
     Platform,
-    StyleSheet
+    StyleSheet, AsyncStorage
 } from 'react-native';
-import * as Animatable from 'react-native-animatable';
-import {LinearGradient} from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
-import {createUser} from "../../Utils/Auth";
+import {user_login} from "../api/User_Api";
 
 const SignInScreen = ({navigation}) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [checkValidEmail, setCheckValidEmail] = useState(false);
+
+    const handleCheckEmail = text => {
+        let re = /\S+@\S+\.\S+/;
+        let regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+        setEmail(text);
+        if (re.test(text) || regex.test(text)) {
+            setCheckValidEmail(false);
+        } else {
+            setCheckValidEmail(true);
+        }
+    };/*
+    const checkPasswordValidity = value => {
+        const isNonWhiteSpace = /^\S*$/;
+        if (!isNonWhiteSpace.test(value)) {
+            return 'Password must not contain Whitespaces.';
+        }
+
+        const isContainsUppercase = /^(?=.*[A-Z]).*$/;
+        if (!isContainsUppercase.test(value)) {
+            return 'Password must have at least one Uppercase Character.';
+        }
+
+        const isContainsLowercase = /^(?=.*[a-z]).*$/;
+        if (!isContainsLowercase.test(value)) {
+            return 'Password must have at least one Lowercase Character.';
+        }
+
+        const isContainsNumber = /^(?=.*[0-9]).*$/;
+        if (!isContainsNumber.test(value)) {
+            return 'Password must contain at least one Digit.';
+        }
+
+        const isValidLength = /^.{8,16}$/;
+        if (!isValidLength.test(value)) {
+            return 'Password must be 8-16 Characters Long.';
+        }
+
+         return null;
+    };*/
+    const handleLogin = () => {
+        const checkPassowrd = checkPasswordValidity(password);
+        if (!checkPassowrd) {
+            user_login({
+                email: email,
+                password: password,
+            })
+                .then(result => {
+                    console.log(result.status)
+                    if (result.status === 200) {
+                        //AsyncStorage.setItem('AccessToken', result.data.token);
+                        navigation.replace('Home');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        } else {
+            alert(checkPassowrd);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -30,9 +93,16 @@ const SignInScreen = ({navigation}) => {
                         placeholder={"Votre Email..."}
                         style={styles.textInput}
                         autoCapitalize={"none"}
+                        value={email}
+                        onChangeText={text => handleCheckEmail(text)}
                     />
 
                 </View>
+                {checkValidEmail ? (
+                    <Text style={styles.textFailed}>Wrong format email</Text>
+                ) : (
+                    <Text style={styles.textFailed}> </Text>
+                )}
                 <Text style={[styles.text_footer, {marginTop: 35}]} >Mot de passe :</Text>
                 <View style={styles.action}>
                     <FontAwesome
@@ -45,21 +115,32 @@ const SignInScreen = ({navigation}) => {
                         secureTextEntry={true}
                         style={styles.textInput}
                         autoCapitalize={"none"}
+                        value={password}
+                        onChangeText={text => setPassword(text)}
                     />
 
                 </View>
                 <View style={styles.button}>
-                    <LinearGradient
-                        colors={['#08d4c4','#01ab9d']}
-                        style={styles.signIn}
+                    {email === '' || password === '' || checkValidEmail === true ? (
+                    <TouchableOpacity
+                        disabled
+                        style={[styles.signIn, {borderColor: '#132448', borderWidth: 1, marginTop: 15}]}
+                        onPress={() =>{login()}}
                     >
-                        <Text style={[styles.textSign,{color: '#fff' }]}> Connexion</Text>
-                    </LinearGradient>
+                        <Text style={[styles.textSign, {color: '#697a13'}]}>Connexion</Text>
+                    </TouchableOpacity>
+                        ):(
+                        <TouchableOpacity
+                            style={[styles.signIn, {borderColor: '#132448', borderWidth: 1, marginTop: 15}]}
+                            onPress={() =>{handleLogin()}}>
+                            <Text style={[styles.textSign, {color: '#697a13'}]}>Connexion</Text>
+                        </TouchableOpacity>
+                            )}
                     <TouchableOpacity
                         onPress={() => navigation.navigate('SignUpScreen')}
-                        style={[styles.signIn, {borderColor: '#009387', borderWidth: 1, marginTop: 15}]}
+                        style={[styles.signIn, {borderColor: '#132448', borderWidth: 1, marginTop: 15}]}
                     >
-                        <Text style={[styles.textSign, {color: '#009387'}]}>Inscription</Text>
+                        <Text style={[styles.textSign, {color: '#697a13'}]}>Inscription</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -73,7 +154,7 @@ export default SignInScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 3,
-        backgroundColor: '#009387'
+        backgroundColor: '#132448'
     },
     header: {
         flex: 1,
@@ -95,7 +176,7 @@ const styles = StyleSheet.create({
         fontSize: 30
     },
     text_footer: {
-        color: '#05375a',
+        color: '#132448',
         fontSize: 18
     },
     action: {
@@ -116,7 +197,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
-        color: '#05375a',
+        color: '#132448',
     },
     errorMsg: {
         color: '#FF0000',
