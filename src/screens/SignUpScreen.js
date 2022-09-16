@@ -9,18 +9,65 @@ import {
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { FontAwesome } from '@expo/vector-icons';
-import axios from "axios";
+import userService from "../services/UserService";
 
 const SignUpScreen = ({navigation}) => {
 
-    const [name, SetName] = useState('');
-    const [email, SetEmail] = useState('');
-    const [password, SetPassword] = useState('');
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    const handleClick = async () => {
-        axios.post('localhost:4000/users/signup', { name:name,email:email,password: password })
-            .then(response => console.log(response.data));
+    const handleSubmit = () => {
+        let role = "user";
+        userService
+            .signup({ name, email, password, role})
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     };
+
+   /* const handleCheckEmail = text => {
+        let re = /\S+@\S+\.\S+/;
+        let regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+        setEmail(text);
+        if (re.test(text) || regex.test(text)) {
+            setCheckValidEmail(false);
+        } else {
+            setCheckValidEmail(true);
+        }
+    };
+    const checkPasswordValidity = value => {
+        const isNonWhiteSpace = /^\S*$/;
+        if (!isNonWhiteSpace.test(value)) {
+            return 'Password must not contain Whitespaces.';
+        }
+
+        const isContainsUppercase = /^(?=.*[A-Z]).*$/;
+        if (!isContainsUppercase.test(value)) {
+            return 'Password must have at least one Uppercase Character.';
+        }
+
+        const isContainsLowercase = /^(?=.*[a-z]).*$/;
+        if (!isContainsLowercase.test(value)) {
+            return 'Password must have at least one Lowercase Character.';
+        }
+
+        const isContainsNumber = /^(?=.*[0-9]).*$/;
+        if (!isContainsNumber.test(value)) {
+            return 'Password must contain at least one Digit.';
+        }
+
+        const isValidLength = /^.{8,16}$/;
+        if (!isValidLength.test(value)) {
+            return 'Password must be 8-16 Characters Long.';
+        }
+
+         return null;
+    };*/
 
     return (
         <View style={styles.container}>
@@ -40,7 +87,7 @@ const SignUpScreen = ({navigation}) => {
                         style={styles.textInput}
                         autoCapitalize={"none"}
                         value={name}
-                        onChangeText={name => SetName(name)}
+                        onChangeText={name => setName(name)}
                     />
 
                 </View>
@@ -56,7 +103,8 @@ const SignUpScreen = ({navigation}) => {
                         style={styles.textInput}
                         autoCapitalize={"none"}
                         value={email}
-                        onChangeText={email => SetEmail(email)}
+                        onChangeText={email => setEmail(email)}
+
                     />
 
                 </View>
@@ -73,7 +121,7 @@ const SignUpScreen = ({navigation}) => {
                         style={styles.textInput}
                         autoCapitalize={"none"}
                         value={password}
-                        onChangeText={password => SetPassword(password)}
+                        onChangeText={password => setPassword(password)}
                     />
                     <Animatable.View>
 
@@ -97,7 +145,7 @@ const SignUpScreen = ({navigation}) => {
                 </View>
                 <View style={styles.button}>
                     <TouchableOpacity
-                        onPress={() => handleClick(this)}
+                        onPress={() => handleSubmit()}
                         style={[styles.signIn, {borderColor: '#132448', borderWidth: 1, marginTop: 15}]}
                     >
                         <Text style={[styles.textSign, {color: '#132448'}]}>Inscription</Text>

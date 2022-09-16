@@ -8,53 +8,15 @@ import {
     StyleSheet, AsyncStorage
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import {user_login} from "../api/User_Api";
+import userService from "../services/UserService";
 
 const SignInScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [checkValidEmail, setCheckValidEmail] = useState(false);
 
-    const handleCheckEmail = text => {
-        let re = /\S+@\S+\.\S+/;
-        let regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
 
-        setEmail(text);
-        if (re.test(text) || regex.test(text)) {
-            setCheckValidEmail(false);
-        } else {
-            setCheckValidEmail(true);
-        }
-    };/*
-    const checkPasswordValidity = value => {
-        const isNonWhiteSpace = /^\S*$/;
-        if (!isNonWhiteSpace.test(value)) {
-            return 'Password must not contain Whitespaces.';
-        }
-
-        const isContainsUppercase = /^(?=.*[A-Z]).*$/;
-        if (!isContainsUppercase.test(value)) {
-            return 'Password must have at least one Uppercase Character.';
-        }
-
-        const isContainsLowercase = /^(?=.*[a-z]).*$/;
-        if (!isContainsLowercase.test(value)) {
-            return 'Password must have at least one Lowercase Character.';
-        }
-
-        const isContainsNumber = /^(?=.*[0-9]).*$/;
-        if (!isContainsNumber.test(value)) {
-            return 'Password must contain at least one Digit.';
-        }
-
-        const isValidLength = /^.{8,16}$/;
-        if (!isValidLength.test(value)) {
-            return 'Password must be 8-16 Characters Long.';
-        }
-
-         return null;
-    };*/
-    const handleLogin = () => {
+    /*const handleLogin = () => {
         const checkPassowrd = checkPasswordValidity(password);
         if (!checkPassowrd) {
             user_login({
@@ -74,6 +36,17 @@ const SignInScreen = ({navigation}) => {
         } else {
             alert(checkPassowrd);
         }
+    };*/
+    const handleSubmit = () => {
+        userService
+            .login({ email, password })
+            .then((res) => {
+                console.log(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+
     };
 
     return (
@@ -94,7 +67,7 @@ const SignInScreen = ({navigation}) => {
                         style={styles.textInput}
                         autoCapitalize={"none"}
                         value={email}
-                        onChangeText={text => handleCheckEmail(text)}
+                        onChangeText={text => setEmail(text)}
                     />
 
                 </View>
@@ -121,18 +94,18 @@ const SignInScreen = ({navigation}) => {
 
                 </View>
                 <View style={styles.button}>
-                    {email === '' || password === '' || checkValidEmail === true ? (
+                    {email === '' || password === '' /*|| checkValidEmail === true*/ ? (
                     <TouchableOpacity
                         disabled
                         style={[styles.signIn, {borderColor: '#132448', borderWidth: 1, marginTop: 15}]}
-                        onPress={() =>{login()}}
+                        onPress={() =>{}}
                     >
                         <Text style={[styles.textSign, {color: '#697a13'}]}>Connexion</Text>
                     </TouchableOpacity>
                         ):(
                         <TouchableOpacity
                             style={[styles.signIn, {borderColor: '#132448', borderWidth: 1, marginTop: 15}]}
-                            onPress={() =>{handleLogin()}}>
+                            onPress={() =>{handleSubmit(), navigation.navigate('ProfileScreen')}}>
                             <Text style={[styles.textSign, {color: '#697a13'}]}>Connexion</Text>
                         </TouchableOpacity>
                             )}
