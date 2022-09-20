@@ -1,16 +1,15 @@
 import axios from "axios";
 axios.defaults.baseURL = "http://10.0.2.2:4000/";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-axios.defaults.headers.common["authorization"] = AsyncStorage.getItem("token");
+import { Storage } from 'expo-storage'
+axios.defaults.headers.common["authorization"] = Storage.getItem("token")
+
 class GenericService {
     constructor() { }
     get = (url) =>
         new Promise((resolve, reject) => {
             axios
                 .get(url)
-                .then((res) => {
-                    resolve(res.data);
-                })
+                .then((res) => {resolve(res.data);})
                 .catch((err) => {
                     reject(err);
                 });

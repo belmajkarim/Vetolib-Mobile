@@ -16,32 +16,12 @@ const SignInScreen = ({navigation}) => {
     const [checkValidEmail, setCheckValidEmail] = useState(false);
 
 
-    /*const handleLogin = () => {
-        const checkPassowrd = checkPasswordValidity(password);
-        if (!checkPassowrd) {
-            user_login({
-                email: email,
-                password: password,
-            })
-                .then(result => {
-                    console.log(result.status)
-                    if (result.status === 200) {
-                        //AsyncStorage.setItem('AccessToken', result.data.token);
-                        navigation.replace('Home');
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                });
-        } else {
-            alert(checkPassowrd);
-        }
-    };*/
     const handleSubmit = () => {
         userService
             .login({ email, password })
             .then((res) => {
                 console.log(res.data)
+                navigation.navigate('AllClinicsScreen')
             })
             .catch((err) => {
                 console.log(err)
@@ -105,7 +85,7 @@ const SignInScreen = ({navigation}) => {
                         ):(
                         <TouchableOpacity
                             style={[styles.signIn, {borderColor: '#132448', borderWidth: 1, marginTop: 15}]}
-                            onPress={() =>{handleSubmit(), navigation.navigate('ProfileScreen')}}>
+                            onPress={() =>{handleSubmit()}}>
                             <Text style={[styles.textSign, {color: '#697a13'}]}>Connexion</Text>
                         </TouchableOpacity>
                             )}

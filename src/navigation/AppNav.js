@@ -8,6 +8,7 @@ import styles from "react-native/template/_eslintrc";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import AllClinics from "../screens/AllClinics";
 
 function AppNav() {
     const stack = createNativeStackNavigator()
@@ -24,6 +25,7 @@ function AppNav() {
                 <stack.Screen name="SignUpScreen" component={SignUpScreen}/>
                 <stack.Screen name="HomeScreen" component={HomeScreen}/>
                 <stack.Screen name="ProfileScreen" component={ProfileScreen}/>
+                <stack.Screen name="AllClinicsScreen" component={AllClinics}/>
             </stack.Navigator>
             <StatusBar style="auto" />
         </NavigationContainer>

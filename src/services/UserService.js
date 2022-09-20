@@ -1,6 +1,8 @@
 import GenericService from "./GenericService";
 import jwtDecode from "jwt-decode";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
+//import * as SecureStore from 'expo-secure-store';
+import { Storage } from 'expo-storage'
 class UserService extends GenericService {
     constructor() {
         super();
@@ -20,8 +22,11 @@ class UserService extends GenericService {
     login = ({ email, password }) =>
         new Promise((resolve, reject) => {
             this.post("/users/login", { email, password })
-                .then((data) => {
-                    AsyncStorage.setItem("token", data.token);
+                .then( data => {
+                    //SecureStore.setItemAsync("token", data.token)
+                    //AsyncStorage.setItem('token', data.token)
+                    Storage.setItem("token", JSON.stringify(data.token))
+
                     resolve(data.token);
                 })
                 .catch((err) => {
@@ -30,7 +35,7 @@ class UserService extends GenericService {
         });
 
     logout = () => {
-        AsyncStorage.removeItem("token");
+       Storage.removeItem("token");
     };
 
     getVeterinarians = () =>
@@ -111,7 +116,7 @@ class UserService extends GenericService {
 
     getLoggedInUser = () => {
         try {
-            const jwt = AsyncStorage.getItem("token");
+            const jwt = Storage.getItem("token");
             return jwtDecode(jwt);
         } catch (ex) {
             return null;
@@ -119,7 +124,7 @@ class UserService extends GenericService {
     };
 
     isLoggedIn = () => {
-        return !!AsyncStorage.getItem("token");
+        return !!Storage.getItem("token");
     };
 }
 
